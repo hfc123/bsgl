@@ -11,7 +11,7 @@
         >
 
         <activity
-            android:name=".sample.ListSamples"
+            android:name=".MainActivity1"
             android:label="ViewPager Indicator">
 
             <intent-filter>
