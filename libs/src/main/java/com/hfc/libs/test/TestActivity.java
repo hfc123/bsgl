@@ -9,8 +9,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hfc.libs.R;
+import com.hfc.libs.banner.jdindicator.JDViewIndicator;
+import com.hfc.libs.banner.transformer3d.CubeTransformer;
+import com.hfc.libs.banner.view.FCBanner;
 import com.ydtx.jobmanage.library.dialog.ListViewDialog;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,7 +39,20 @@ public class TestActivity extends Activity {
                 showListView();
             }
         });
+        List<Object> iis= new ArrayList<>();
+        iis.add(com.hfc.libs.R.drawable.bg1);
+        iis.add(com.hfc.libs.R.drawable.bg2);
+        iis.add(com.hfc.libs.R.drawable.bg3);
+        iis.add(com.hfc.libs.R.drawable.bg4);
+        FCBanner bn= findViewById(R.id.hfcbanner);
+        bn.setBannerList(iis);
+        bn.setTransformer(new CubeTransformer());
 
+        JDViewIndicator jdViewIndicator =  new JDViewIndicator(this);
+        jdViewIndicator.setSizeSelectResources(R.integer.indicator_width, R.integer.indicator_height);
+        jdViewIndicator.setColorResourcesForAlpha(R.color.colorAccent);
+        jdViewIndicator.setDrawableColorResources(R.color.black,R.color.colorAccent);
+        bn.setPageIndicator(jdViewIndicator);
     }
 
     private void showListView() {

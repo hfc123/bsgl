@@ -1,4 +1,4 @@
-package com.hfc.libs.banner.transformer;
+package com.hfc.libs.banner.transformer3d;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;

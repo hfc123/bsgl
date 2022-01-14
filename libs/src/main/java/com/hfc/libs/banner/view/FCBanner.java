@@ -1,34 +1,28 @@
 package com.hfc.libs.banner.view;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.hfc.libs.R;
 import com.hfc.libs.banner.adapter.HFCViewAdapter;
 import com.hfc.libs.banner.imageloader.DefaultImageView;
 import com.hfc.libs.banner.interfaces.HFCPagerTransformer;
 import com.hfc.libs.banner.interfaces.ViewCreator;
 import com.hfc.libs.banner.jakewhartonindicator.CirclePageIndicator;
 import com.hfc.libs.banner.jakewhartonindicator.PageIndicator;
-import com.hfc.libs.banner.transformer.CubeTransformer;
 import com.hfc.libs.dputils.DimUtil;
 import com.hfc.libs.toast.IToast;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -85,7 +79,7 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
         }
         View  pageIndicatorV= (View) pageIndicator;
         this.pageIndicator =pageIndicator;
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         params.addRule(CENTER_HORIZONTAL);
         //代码接收的是Pixel 需抓换成px
@@ -94,6 +88,8 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
         addView(pageIndicatorV);
         if (viewPager!=null)
         pageIndicator.setViewPager(viewPager);
+
+//        invalidate();
     }
     private void initViewPager() {
         if (viewPager==null)
@@ -140,7 +136,9 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
     }
 
     public void setPageIndicator(PageIndicator pageIndicator) {
-        this.pageIndicator = pageIndicator;
+
+        initIndicator(pageIndicator);
+
     }
 
 

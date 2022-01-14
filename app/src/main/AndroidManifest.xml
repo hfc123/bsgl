@@ -12,7 +12,7 @@
 
         <activity
             android:name=".MainActivity1"
-            android:label="ViewPager Indicator">
+          >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
