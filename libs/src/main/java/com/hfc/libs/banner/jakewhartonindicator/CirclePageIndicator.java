@@ -257,9 +257,12 @@ public class CirclePageIndicator extends View implements PageIndicator {
                 dX = shortOffset;
                 dY = drawLong;
             }
+            if (iLoop==0||iLoop==count-1){
+                continue;
+            }
             // Only paint fill if not completely transparent
             if (mPaintPageFill.getAlpha() > 0) {
-                canvas.drawCircle(dX, dY, pageFillRadius, mPaintPageFill);
+                //    canvas.drawCircle(dX, dY, pageFillRadius, mPaintPageFill);
             }
 
             // Only paint stroke if a stroke width was non-zero
@@ -267,9 +270,17 @@ public class CirclePageIndicator extends View implements PageIndicator {
                 canvas.drawCircle(dX, dY, mRadius, mPaintStroke);
             }
         }
-
+        int mCurrentPage2=0;
+        if (mCurrentPage==0){
+            mCurrentPage2=1;
+        }else
+        if (mCurrentPage==count-1){
+            mCurrentPage2=count-2;
+        }else {
+            mCurrentPage2= mCurrentPage;
+        }
         //Draw the filled circle according to the current scroll
-        float cx = (mSnap ? mSnapPage : mCurrentPage) * threeRadius;
+        float cx = mCurrentPage2 * threeRadius;
         if (!mSnap) {
             cx += mPageOffset * threeRadius;
         }

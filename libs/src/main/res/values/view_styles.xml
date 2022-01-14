@@ -9,4 +9,10 @@
     <style name="MyBannerStyle" parent="BaseBannerViewPagerStyle">
 
     </style>
+    <style name="MyCustomCirclePageIndicator" parent="CustomCirclePageIndicator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">50dp</item>
+    </style>
 </resources>
