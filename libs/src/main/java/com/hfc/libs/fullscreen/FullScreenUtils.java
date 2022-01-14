@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import com.hfc.libs.R;
 import com.hfc.libs.exception.NoDecorChildViewException;
 import static com.hfc.libs.fullscreen.StatusBarsUtil.getNavigationBarHeight;
 import static com.hfc.libs.fullscreen.StatusBarsUtil.getStatusBarHeight;
@@ -28,7 +30,11 @@ import static com.hfc.libs.fullscreen.StatusBarsUtil.getStatusBarHeight;
  * @date :2022/1/7 10:35
  **/
 public class FullScreenUtils {
+    public static  void setFullScreen(@NonNull Activity activity){
+      //super.oncreate之前设置  activity.setTheme(R.style.TranslucentTheme);
 
+       setFullScreen(activity, R.color.transtport,true,false);
+    }
     public static  void setFullScreen(@NonNull Activity activity, @ColorRes int color,boolean bgfitwindow,boolean viewfitwindow){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setFullScreen21(activity,color,bgfitwindow,viewfitwindow);
@@ -129,7 +135,17 @@ public class FullScreenUtils {
             super(context, attrs, defStyleAttr, defStyleRes);
         }
     }
-
+    /**
+     * 适应系统窗口（状态栏与导航栏）
+     * <p>
+     * 不会重置原有Padding
+     *
+     * @param activity Activity对象
+     * @param views    适应窗口的View
+     */
+    public static void fitsAllPadding(Activity activity, View... views) {
+        fitsPadding(activity, true, true, false, views);
+    }
     /**
      * 适应系统窗口（PaddingTop & PaddingBottom）
      *

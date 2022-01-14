@@ -38,7 +38,8 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
     private List<View> views = new ArrayList<>();
     private PagerAdapter pagerAdapter;
     private boolean isLoop;
-    private boolean canLoop;
+    private boolean canAutoLoop;
+    boolean needIndicator;
     private AutoRunable autoRunable = new AutoRunable(this);
     private float delaytime=2;//秒
     private ViewCreator viewCreator;
@@ -48,7 +49,7 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
     public  FCBanner(Context context, AttributeSet attrs) {
         this(context, attrs,0);
     }
-
+    public  boolean needLoop=true;//是否需要循环；
     public FCBanner(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView();
@@ -68,7 +69,7 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
 
     }
     public  void  startLoop(){
-        if (views.size()>1)
+        if (views.size()>1&&!isLoop)
         postDelayed(autoRunable, (long) (delaytime*1000));
     }
     private void initIndicator(PageIndicator pageIndicator) {
@@ -166,11 +167,14 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
         switch (state) {
             case 0:
             case 1:
-                if (viewPager.getCurrentItem() == 0) {
-                    viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 2, false);
-                } else if (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1) {
-                    viewPager.setCurrentItem(1, false);
+                if (needLoop){
+                    if (viewPager.getCurrentItem() == 0) {
+                        viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 2, false);
+                    } else if (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1) {
+                        viewPager.setCurrentItem(1, false);
+                    }
                 }
+
                 break;
             case 2:
                 break;
@@ -188,14 +192,20 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
         @Override
         public void run() {
             FCBanner banner = mBanner.get();
-            if (banner != null&&canLoop) {
+            if (banner != null&&canAutoLoop) {
                 isLoop=true;
+                if (!needLoop&&viewPager.getCurrentItem()==viewPager.getAdapter().getCount()-1){
+                    //不需要循环最后一个就停止
+                    return;
+                }
                 postDelayed(autoRunable, (long) (delaytime*1000));
                 int currentpage= viewPager.getCurrentItem();
-                if (currentpage==1)
+
+                if (currentpage==1&&canAutoLoop)
                 banner.getViewPager().setCurrentItem(++currentpage%viewPager.getAdapter().getCount(),false);
                 else
                 banner.getViewPager().setCurrentItem(++currentpage%viewPager.getAdapter().getCount(),true);
+
             }else {
                 isLoop =false;
             }
@@ -215,12 +225,12 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
     public boolean dispatchTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                oldautorun = canLoop;
-                canLoop =false;
+                oldautorun = canAutoLoop;
+                canAutoLoop =false;
                 isLoop =false;
                 break;
             case MotionEvent.ACTION_UP:
-                canLoop =oldautorun;
+                canAutoLoop =oldautorun;
                 removeCallbacks(autoRunable);
                 postDelayed(autoRunable, (long) (delaytime*1000));
                 break;
@@ -236,7 +246,7 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
     }
     //图片
     public void setBannerList(List<Object> list,boolean needLoop){
-        canLoop =needLoop;
+        canAutoLoop =needLoop;
         if (list==null||list.size()<=0){
             IToast.getInstance(getContext()).showI("列表为空");
             return;
@@ -262,7 +272,7 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
     }
     //设置自定义的控件
     public void setBannerViewList(List<View> list,boolean needLoop){
-        canLoop =needLoop;
+        canAutoLoop =needLoop;
         if (list==null||list.size()<=0){
             IToast.getInstance(getContext()).showI("列表为空");
             return;
@@ -289,7 +299,7 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
         pagerAdapter.notifyDataSetChanged();
         viewPager.setCurrentItem(currentItem);
 
-        if (canLoop){
+        if (canAutoLoop){
             postDelayed(autoRunable, (long) (delaytime*1000));
         }
     }
@@ -305,12 +315,13 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
         this.viewCreator = viewCreator;
     }
 
-    public boolean isCanLoop() {
-        return canLoop;
+    public boolean iscanAutoLoop() {
+        return canAutoLoop;
     }
 
-    public void setCanLoop(boolean canLoop) {
-        this.canLoop = canLoop;
+    public void setcanAutoLoop(boolean canAutoLoop) {
+        this.canAutoLoop = canAutoLoop;
+        startLoop();
     }
 
     public void  setViewPagerTransformer(){
@@ -329,5 +340,32 @@ public class FCBanner extends RelativeLayout implements ViewPager.OnPageChangeLi
 
     public HFCPagerTransformer getPagerTransformer(){
         return transformer;
+    }
+
+    public boolean isNeedIndicator() {
+        return needIndicator;
+    }
+
+    public void setNeedIndicator(boolean needIndicator) {
+        this.needIndicator = needIndicator;
+       // ((View) pageIndicator).setVisibility(View.GONE);
+        if (!needIndicator)
+        removeView((View) pageIndicator);
+    }
+
+    public float getDelaytime() {
+        return delaytime;
+    }
+
+    public void setDelaytime(float delaytime) {
+        this.delaytime = delaytime;
+    }
+
+    public boolean isNeedLoop() {
+        return needLoop;
+    }
+
+    public void setNeedLoop(boolean needLoop) {
+        this.needLoop = needLoop;
     }
 }
