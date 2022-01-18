@@ -15,5 +15,9 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
-
+    <style name="AppThemeStart" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/bg1</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>
